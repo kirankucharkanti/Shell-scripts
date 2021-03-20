@@ -6,7 +6,7 @@ read -t1 < <(stat -t "$mountpoint" 2>&-)
 
 if [ -z "$REPLY" ] ; then
 echo "NFS mount stale. Removing..."
-  echo -e "Ezbotsvn nfs is stopped.Please cheack asap`date`" | mail -s "EZBOTSVN NFS is stopped" john@abc.com
+  echo -e "Ezbotsvn nfs is stopped.Please cheack asap`date`" | mail -s "EZBOTSVN NFS is stopped" jon@abc.com
  exit;
 fi
 
