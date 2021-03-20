@@ -1,0 +1,16 @@
+---
+-
+  hosts: infra
+  name: "Transfer and execute a script."
+  tasks:
+    -
+      name: "Execute the script"
+      script: /root/monitoringinfra.sh
+-
+  become: true
+  hosts: ubuntu
+  name: "Transfer and execute a script."
+  tasks:
+    -
+      name: "Execute the script"
+      script: /root/monitoringdevops1.sh
