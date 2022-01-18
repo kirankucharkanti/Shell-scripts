@@ -1,0 +1,6 @@
+BeyondSports.Core.Data.Provider.ChyronHego.Tracab/
+BeyondSports.Core.Data.Provider.ChyronHego/
+BeyondSports.Core.Data.Provider.InternalFormat/
+BeyondSports.Core.Data.Provider.NHL/
+BeyondSports.Core.Data.Provider.SecondSpectrumV2/
+BeyondSports.Core.Data.Provider/

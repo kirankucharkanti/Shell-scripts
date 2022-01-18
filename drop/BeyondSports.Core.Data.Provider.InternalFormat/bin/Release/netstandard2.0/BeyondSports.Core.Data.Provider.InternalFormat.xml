@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BeyondSports.Core.Data.Provider.InternalFormat</name>
+    </assembly>
+    <members>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler">
+            <summary>
+            Sets up the connection code to handle the Internal Data Format through a stream.
+            </summary>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.TargetFrameRate">
+            <inheritdoc/>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Configuration">
+            <inheritdoc/>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.UniqueMatchId">
+            <inheritdoc/>
+        </member>
+        <member name="E:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.OnTrackableFrame">
+            <inheritdoc />
+        </member>
+        <member name="E:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.OnStreamStateChanged">
+            <inheritdoc/>>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Stream">
+            <inheritdoc/>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.FormatParser">
+            <inheritdoc/>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.SettingKeys">
+            <inheritdoc/>
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Initialise(BeyondSports.Core.Plugins.Settings.Interfaces.IPluginSettings)">
+            <inheritdoc/>
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Start">
+            <inheritdoc />
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Authenticate">
+            <inheritdoc />
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Handlers.InternalDataFormatDataHandler.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Mapping.IdfEntityExtensions">
+             <summary>
+             Mapping functionality for <see cref="T:BeyondSports.Core.Entities.Interfaces.ITrackableEntity"/>. Converts to and back from an entity in either
+             the format as defined by the Core API, or as defined by the internal mapping structure for the internal
+             data format.
+            
+             The mapping structures have been chosen to contain as few complex types as possible, to decrease the
+             chance that Unity's implementation of .NET (including its current GC) will have a problem with it.
+             </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Mapping.IdfFrameExtensions">
+             <summary>
+             Mapping functionality for <see cref="T:BeyondSports.Core.Frames.Interfaces.ITrackableFrame"/>. Converts to and back from a trackable frame in either
+             the format as defined by the Core API, or as defined by the internal mapping structure for the internal
+             data format.
+            
+             The mapping structures have been chosen to contain as few complex types as possible, to decrease the
+             chance that Unity's implementation of .NET (including its current GC) will have a problem with it.
+             </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Mapping.IdfOffsideContextExtensions">
+            <summary>
+            Mapping functionality for <see cref="T:BeyondSports.Core.Data.Provider.InternalFormat.ObjectModel.IdfOffsideDetectionContext"/>.
+            Converts to and back from a context defined by the Core Api, or as defined by the internal mapping structure for the internal
+            data format.
+            </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Mapping.IdfPoseJointExtensions">
+             <summary>
+             Mapping functionality for <see cref="T:BeyondSports.Core.Entities.Pose.PoseJoint"/>. Converts to and back from a pose joint in either
+             the format as defined by the Core API, or as defined by the internal mapping structure for the internal
+             data format.
+            
+             The mapping structures have been chosen to contain as few complex types as possible, to decrease the
+             chance that Unity's implementation of .NET (including its current GC) will have a problem with it.
+            
+             Vector components are not switched to because we're in full control of the format. Keep it simple.
+             </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.ObjectModel.IdfEntity">
+            <summary>
+            Mapping class to serialise <see cref="T:BeyondSports.Core.Entities.Interfaces.ITrackableEntity"/> based data from or into.
+            </summary>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.ObjectModel.IdfEntity.PoseJoints">
+            <summary>
+            Key = integer, as represented at mapping time by <see cref="T:BeyondSports.Core.Entities.Pose.PoseJoint"/>. We're using an integer to save precious bandwidth that would otherwise be taken up by a long joint name *per person* (e.g. usually at least 22 in one frame).
+            Value = vector3, represented by 3 floats because we need simple types here for serialisation.
+            </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.ObjectModel.IdfFrame">
+            <summary>
+            Super light-weight structure to prevent direct serialisation of objects like <see cref="T:BeyondSports.Core.Frames.Interfaces.ITrackableFrame"/>. Otherwise
+            we would have to serialise classes like Vector3 or API objects. These contain properties and self-referencing objects, which
+            were not built for such purposes (e.g. they aren't simply models holding data only).
+            
+            These structures were made to be feature-compatible with the current .DAT format, which was always
+            used as an intermediate data format for both saving to file and for streaming over the network. This
+            new format can be used to supersede .DAT and is therefore treated as such.
+            </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.ObjectModel.IdfOffsideDetectionContext">
+            <summary>
+            Mapping class to serialise offside detection data from or into.
+            </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.ObjectModel.IdfOffsidePerson">
+            <summary>
+            Mapping class to serialise person data, who is involved in the offside detection, from or into.
+            </summary>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Parsers.InternalDataFormatParser">
+            <summary>
+            Allows conversion to and from Beyond Sports' own internal data format. Both parsing and unparsing
+            is supported, due to the usage of this parser for both incoming and outgoing trackable data in
+            multiple areas of the Beyond / Core pipeline and toolset.
+            </summary>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Parsers.InternalDataFormatParser.Format">
+            <inheritdoc />
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Parsers.InternalDataFormatParser.Parse(System.Byte[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentNullException"><paramref name="nativeTrackableFrame"/> is <see langword="null"/></exception>
+            <exception cref="T:BeyondSports.Core.Data.Provider.Parsers.Exceptions.TrackableFormatParserException">Could not parse the given native trackable frame in the Core internal data format.</exception>
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Parsers.InternalDataFormatParser.CanParse(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Parsers.InternalDataFormatParser.Unparse(BeyondSports.Core.Frames.Interfaces.ITrackableFrame)">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentNullException"><paramref name="trackableFrame"/> is <see langword="null"/></exception>
+            <exception cref="T:BeyondSports.Core.Data.Provider.Parsers.Exceptions.TrackableFormatParserException">Could not unparse to a byte array representation of the Core internal data format.</exception>
+        </member>
+        <member name="T:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream">
+            <summary>
+            Implements a stream for Internal Data Format files.
+            </summary>
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.AuthToken">
+            <inheritdoc/>
+        </member>
+        <member name="E:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.OnDataReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.PropertyChanged">
+            <inheritdoc />
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.State">
+            <inheritdoc />
+        </member>
+        <member name="P:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.ConnectionState">
+            <inheritdoc />
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.Start">
+            <inheritdoc/>
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.Write(System.Byte[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.Authenticate">
+            <inheritdoc/>
+        </member>
+        <member name="M:BeyondSports.Core.Data.Provider.InternalFormat.Streams.InternalDataFormatStream.Dispose">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
